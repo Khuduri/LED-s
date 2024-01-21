@@ -1,0 +1,79 @@
+#include <Adafruit_NeoPixel.h>
+
+#define PIXEL_NUM 138
+#define LED_PIN 8
+#define BRIGHT 150
+
+Adafruit_NeoPixel pixels = Adafruit_NeoPixel(PIXEL_NUM, LED_PIN, NEO_GRB + NEO_KHZ800);
+unsigned char val;
+
+void setup() {
+  Serial.begin(9600);
+  pixels.begin();
+  pixels.show();
+}                         //НЕ ТРОГАТЬ
+
+void loop() {
+  if(Serial.available()) {
+    val = Serial.read();
+  }
+  switch(val) {
+      case 48: Mode_0(50); break;
+      case 49: Mode_1(50,2); break;
+      case 50: break;
+      case 51: break;
+      case 52: break;
+      case 53: break;
+      case 54: break;
+      case 55: break;
+      case 56: break;
+      case 57: break;
+      default: Mode_def(); break;
+    }
+
+}
+
+void Mode_0(unsigned char num) {
+  for(unsigned char i=0; i<num; i++) {
+    fill(random(1,138),150,150,150);
+  }
+  pixels.show();
+  delay(30);
+  fill(0,137,0,0,0);
+  pixels.show();
+  delay(30);
+}
+
+void Mode_1(unsigned short time, unsigned char MAX) {
+  unsigned char Y;
+  for(unsigned char i = 0; i < MAX; i++) {
+    Y = random(1,7);
+    switch(Y) {
+      case 1: fill(0,17,150,150,150); break;
+      case 2: fill(18,35,150,150,150); break;
+      case 3: fill(36,61,150,150,150); break;
+      case 4: fill(62,86,150,150,150); break;
+      case 5: fill(87,111,150,150,150); break;
+      case 6: fill(112,137,150,150,150); break;
+    }
+    pixels.show();
+  }
+  delay(time);
+  fill(0,PIXEL_NUM-1,0,0,0);
+  pixels.show();
+}
+
+void Mode_def() {
+  fill(0,PIXEL_NUM-1,0,0,0);
+  pixels.show();
+}                       //НЕ ТРОГАТЬ
+
+void fill(unsigned char num, unsigned char R, unsigned char G, unsigned char B) {
+  pixels.setPixelColor(num,R,G,B);
+}                       //НЕ ТРОГАТЬ
+
+void fill(unsigned char start, unsigned char finish, unsigned char R, unsigned char G, unsigned char B) {
+  for(unsigned char i=start; i<=finish; i++) {
+    pixels.setPixelColor(i,R,G,B);
+  }
+}                       //НЕ ТРОГАТЬ
